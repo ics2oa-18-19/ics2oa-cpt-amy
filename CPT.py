@@ -1,4 +1,3 @@
-
 import arcade
 import random
 
@@ -10,7 +9,7 @@ cloud_y_positions = []
 black_cloud_x_position = []
 black_cloud_y_position = []
 player_y_position = HEIGHT/2
-player_x_position = WIDTH
+player_x_position = WIDTH/2
 
 up_pressed = False
 down_pressed = False
@@ -47,6 +46,7 @@ def setup():
 
 
 def update(delta_time):
+    global up_pressed, player_y_position
     for index in range(len(cloud_x_positions)):
         # modify list using square-brakets and the index
         cloud_x_positions[index] -= 10
@@ -61,14 +61,9 @@ def update(delta_time):
         if black_cloud_x_position[index] < 0:
             black_cloud_y_position[index] = random.randrange(0,HEIGHT)
             black_cloud_x_position[index] = random.randrange(WIDTH, WIDTH*2)
-    pass
-
-
-def player_update():
-    global up_pressed, player_y_position
-    if up_pressed:
-        player_y_position += 5
-
+        if up_pressed:
+            player_y_position += 5
+    
 
 def on_draw():
     global player_x_position, player_y_position
