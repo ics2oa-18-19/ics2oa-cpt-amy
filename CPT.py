@@ -9,12 +9,10 @@ cloud_y_positions = []
 black_cloud_x_position = []
 black_cloud_y_position = []
 player_y_position = HEIGHT/2
-player_x_position = WIDTH/2
+player_x_position = 20
 
 up_pressed = False
 down_pressed = False
-left_pressed = False
-right_pressed = False
 
 for cloud in range(100):
     x = random.randrange(0, WIDTH)
@@ -46,7 +44,7 @@ def setup():
 
 
 def update(delta_time):
-    global up_pressed, player_y_position
+    global up_pressed, down_pressed, player_y_position
     for index in range(len(cloud_x_positions)):
         # modify list using square-brakets and the index
         cloud_x_positions[index] -= 10
@@ -61,9 +59,10 @@ def update(delta_time):
         if black_cloud_x_position[index] < 0:
             black_cloud_y_position[index] = random.randrange(0,HEIGHT)
             black_cloud_x_position[index] = random.randrange(WIDTH, WIDTH*2)
-        if up_pressed:
-            player_y_position += 5
-    
+        if up_pressed == True:
+            player_y_position += 3
+        if down_pressed == True:
+            player_y_position -= 3
 
 def on_draw():
     global player_x_position, player_y_position
@@ -74,18 +73,22 @@ def on_draw():
     for x, y in zip (black_cloud_x_position, black_cloud_y_position):
         arcade.draw_circle_filled(x, y, 15, arcade.color.BLACK)
 
-    arcade.draw_circle_filled(player_x_position, player_x_position, 10, arcade.color.CORAL_PINK)
+    arcade.draw_circle_filled(player_x_position, player_y_position, 15, arcade.color.CORAL_PINK)
 
 
 def on_key_press(key, modifiers):
-    global up_pressed
+    global up_pressed, down_pressed
     if key == arcade.key.W:
         up_pressed = True
+    if key == arcade.key.S:
+        down_pressed = True
 
 def on_key_release(key, modiwfiers):
-    global up_pressed
+    global up_pressed, down_pressed
     if key == arcade.key.W:
         up_pressed = False
+    if key == arcade.key.S:
+        down_pressed = False
 
 def on_mouse_press(x, y, button, modifiers):
     pass
