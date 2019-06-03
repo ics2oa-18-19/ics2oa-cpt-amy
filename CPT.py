@@ -1,13 +1,19 @@
 import arcade
 import random
 
+
 WIDTH = 640
 HEIGHT = 480
 
 cloud_x_positions = []
 cloud_y_positions = []
+
 black_cloud_x_position = []
 black_cloud_y_position = []
+
+rainbow_x_position = []
+rainbow_y_position = []
+
 player_y_position = HEIGHT/2
 player_x_position = 20
 
@@ -25,6 +31,12 @@ for black_cloud in range (10):
     y = random.randrange(0, HEIGHT)
     black_cloud_x_position.append(x)
     black_cloud_y_position.append(y)
+
+for rainbow in range (1):
+    x = random.randrange(0, WIDTH)
+    y = random.randrange(0, HEIGHT)
+    rainbow_x_position.append(x)
+    rainbow_y_position.append(y)
 
 def setup():
     arcade.open_window(WIDTH, HEIGHT, "My Arcade Game")
@@ -54,11 +66,19 @@ def update(delta_time):
             # modify list values using square braket notation
             cloud_y_positions[index] = random.randrange(0, HEIGHT)
             cloud_x_positions[index] = random.randrange(WIDTH, WIDTH*2)
+
     for index in range(len(black_cloud_x_position)):
         black_cloud_x_position[index] -= 10
         if black_cloud_x_position[index] < 0:
             black_cloud_y_position[index] = random.randrange(0,HEIGHT)
             black_cloud_x_position[index] = random.randrange(WIDTH, WIDTH*2)
+
+    for index in range(len(rainbow_x_position)):
+        rainbow_x_position[index] -= 30
+        if rainbow_x_position[index] < 0:
+            rainbow_y_position[index] = random.randrange(0,HEIGHT)
+            rainbow_x_position[index] = random.randrange(WIDTH, WIDTH*2)
+
         if up_pressed == True:
             player_y_position += 3
         if down_pressed == True:
@@ -72,6 +92,8 @@ def on_draw():
         arcade.draw_circle_filled(x, y, 15,arcade.color.WHITE)
     for x, y in zip (black_cloud_x_position, black_cloud_y_position):
         arcade.draw_circle_filled(x, y, 15, arcade.color.BLACK)
+    for x, y in zip (rainbow_x_position, rainbow_y_position):
+        arcade.draw_circle_filled(x, y, 15, arcade.color.ORANGE_RED)
 
     arcade.draw_circle_filled(player_x_position, player_y_position, 15, arcade.color.CORAL_PINK)
 
