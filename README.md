@@ -1,3 +1,3 @@
-Unicorn Run
+# Unicorn Run
 
-Control the unicorn up and down to avoid black clouds from coming towards you!
+Avoid touching the black clouds by controlling the unicorn up and down
