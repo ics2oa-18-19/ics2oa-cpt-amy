@@ -63,6 +63,18 @@ def update(delta_time):
             if down_pressed == True:
                 player_y_position -= 15
 
+    elif current_screen == "menu":
+        for index in range(len(cloud_x_positions)):
+            cloud_x_positions[index] -= 10
+            if cloud_x_positions[index] < 0:
+                cloud_y_positions[index] = random.randrange(0, HEIGHT)
+                cloud_x_positions[index] = random.randrange(WIDTH, WIDTH * 2)
+    elif current_screen == "instructions":
+        for index in range(len(cloud_x_positions)):
+            cloud_x_positions[index] -= 10
+            if cloud_x_positions[index] < 0:
+                cloud_y_positions[index] = random.randrange(0, HEIGHT)
+                cloud_x_positions[index] = random.randrange(WIDTH, WIDTH*2)
 
 def on_draw():
     arcade.start_render()
@@ -118,21 +130,34 @@ def setup():
     arcade.run()
 
 def draw_menu():
-    arcade.set_background_color(arcade.color.LIGHT_BLUE)
     arcade.draw_text("UNICORN RUN", WIDTH/2, HEIGHT/2,
-                     arcade.color.WHITE, font_size=30)
+                     arcade.color.NAVY_BLUE, font_size=30)
     arcade.draw_text("Press I for Instructions", WIDTH/2, HEIGHT/2-60,
-                     arcade.color.PINK_LAVENDER, font_size=20)
+                     arcade.color.COOL_BLACK, font_size=20)
     arcade.draw_text("Press P to Play", WIDTH/2, HEIGHT/2-90,
-                     arcade.color.PINK_LAVENDER, font_size=20)
+                     arcade.color.COOL_BLACK, font_size=20)
 
+    for x, y in zip(cloud_x_positions, cloud_y_positions):
+        arcade.draw_circle_filled(x, y, 5, arcade.color.WHITE)
 
 def draw_instructions():
-    arcade.set_background_color(arcade.color.BLUE_GRAY)
-    arcade.draw_text("Instructions", WIDTH/2, HEIGHT/2,
+    arcade.set_background_color(arcade.color.LIGHT_PINK)
+    global player_x_position, player_y_position
+    arcade.draw_text("Instructions", 20, 400,
                      arcade.color.BLACK, font_size=30)
-    arcade.draw_text("ESC to go back", WIDTH/2, HEIGHT/2-60,
+    arcade.draw_text("""
+           1. Avoid touching the black clouds by moving the 
+           unicorn up and down.
+           2. Press W to go up, S to go down
+           3. Every second you survive is worth 10 points. 
+           4. A rainbow item is worth 10000 points. 
+           5. The clouds will move faster as the time goes by """, 0, HEIGHT / 2, arcade.color.BLACK, font_size=15)
+    arcade.draw_text("ESC to go back", 20, 20,
                      arcade.color.BLACK, font_size=20)
+
+    for x, y in zip(cloud_x_positions, cloud_y_positions):
+        arcade.draw_circle_filled(x, y, 5, arcade.color.WHITE)
+
 
 
 def draw_play():
