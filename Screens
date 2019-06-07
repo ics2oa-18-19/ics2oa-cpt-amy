@@ -24,9 +24,16 @@ def on_draw():
         draw_menu()
     elif current_screen == "instructions":
         arcade.set_background_color(arcade.color.BLUE_GRAY)
-        arcade.draw_text("Instructions", WIDTH/2, HEIGHT/2,
+        arcade.draw_text("Instructions", 20, 450,
                          arcade.color.BLACK, font_size=30)
-        arcade.draw_text("ESC to go back", WIDTH/2, HEIGHT/2-60,
+        arcade.draw_text("""
+        1. Avoid touching the black clouds by moving the unicorn 
+        up and down.
+        2. Press W to go up, S to go down
+        3. Every second you survive is worth 10 points. 
+        4. A rainbow item is worth 10000 points. 
+        5. The clouds will move faster as the time goes by """, 0, HEIGHT/2, arcade.color.BLACK, font_size=15)
+        arcade.draw_text("ESC to go back", 20, 20,
                          arcade.color.BLACK, font_size=20)
         draw_instructions()
     elif current_screen == "play":
@@ -80,11 +87,17 @@ def draw_menu():
 
 def draw_instructions():
     arcade.set_background_color(arcade.color.BLUE_GRAY)
-    arcade.draw_text("Instructions", WIDTH/2, HEIGHT/2,
+    arcade.draw_text("Instructions", 20, 450,
                      arcade.color.BLACK, font_size=30)
-    arcade.draw_text("ESC to go back", WIDTH/2, HEIGHT/2-60,
+    arcade.draw_text("""
+        1. Avoid touching the black clouds by moving the unicorn 
+        up and down.
+        2. Press W to go up, S to go down
+        3. Every second you survive is worth 10 points. 
+        4. A rainbow item is worth 10000 points. 
+        5. The clouds will move faster as the time goes by """, 0, HEIGHT/2, arcade.color.BLACK, font_size=15)
+    arcade.draw_text("ESC to go back", 20, 20,
                      arcade.color.BLACK, font_size=20)
-
 
 def draw_play():
     arcade.set_background_color(arcade.color.ORANGE_RED)
