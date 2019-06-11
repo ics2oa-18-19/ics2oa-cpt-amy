@@ -16,6 +16,8 @@ player_y_position = HEIGHT/2
 player_x_position = 20
 point = 0
 updated_points = ""
+speed = 5
+updated_speed = ""
 
 up_pressed = False
 down_pressed = False
@@ -40,34 +42,39 @@ for rainbow in range(1):
 
 def update(delta_time):
     if current_screen == "play":
-        global up_pressed, down_pressed, player_y_position, point, updated_points
+        global up_pressed, down_pressed, player_y_position, point, updated_points, speed, updated_speed
         for index in range(len(cloud_x_positions)):
-            cloud_x_positions[index] -= 10
+            cloud_x_positions[index] -= speed
             if cloud_x_positions[index] < 0:
                 cloud_y_positions[index] = random.randrange(0, HEIGHT)
                 cloud_x_positions[index] = random.randrange(WIDTH, WIDTH * 2)
 
         for index in range(len(black_cloud_x_position)):
-            black_cloud_x_position[index] -= 10
+            black_cloud_x_position[index] -= speed
             if black_cloud_x_position[index] < 0:
                 black_cloud_y_position[index] = random.randrange(0, HEIGHT)
                 black_cloud_x_position[index] = random.randrange(WIDTH, WIDTH * 2)
 
         for index in range(len(rainbow_x_position)):
-            rainbow_x_position[index] -= 30
+            rainbow_x_position[index] -= speed
             if rainbow_x_position[index] < 0:
                 rainbow_y_position[index] = random.randrange(0, HEIGHT)
                 rainbow_x_position[index] = random.randrange(WIDTH, WIDTH * 2)
 
             if up_pressed == True:
-                player_y_position += 15
+                player_y_position += 17
                 point += 1
                 updated_points = point
+                speed += 0.05
+                updated_speed = speed
 
             if down_pressed == True:
-                player_y_position -= 15
+                player_y_position -= 17
                 point += 1
                 updated_points = point
+                speed += 0.05
+                updated_speed = speed
+
 
     elif current_screen == "menu":
         for index in range(len(cloud_x_positions)):
