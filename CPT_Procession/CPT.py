@@ -75,7 +75,7 @@ def update(delta_time):
                 speed += 0.05
                 updated_speed = speed
 
-
+            
     elif current_screen == "menu":
         for index in range(len(cloud_x_positions)):
             cloud_x_positions[index] -= 10
@@ -187,6 +187,10 @@ def draw_play():
 
     arcade.draw_text(f"{updated_points}", 10, 440, arcade.color.COOL_BLACK, font_size= 20)
 
+def draw_gameover():
+    arcade.set_background_color(arcade.color.BLACK)
+    arcade. draw_text("""GAME 
+                         OVER""", WIDTH/2, HEIGHT/2, arcade.color.RED, font_size= 30)
 
 if __name__ == '__main__':
     setup()
