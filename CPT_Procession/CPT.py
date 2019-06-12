@@ -19,9 +19,6 @@ point = 0
 updated_points = ""
 speed = 5
 updated_speed = ""
-player = [player_x_position, player_y_position, 15]
-for x, y in zip(black_cloud_x_position, black_cloud_y_position):
-    black_cloud = [x, y, 15]
 
 up_pressed = False
 down_pressed = False
@@ -65,6 +62,11 @@ def update(delta_time):
                 rainbow_y_position[index] = random.randrange(0, HEIGHT)
                 rainbow_x_position[index] = random.randrange(WIDTH, WIDTH * 2)
 
+        if player_y_position > 480:
+            player_y_position = 460
+        if player_y_position < 0 :
+            player_y_position = 20
+
         if up_pressed == True:
             player_y_position += 17
             point += 1
@@ -91,6 +93,7 @@ def update(delta_time):
             if cloud_x_positions[index] < 0:
                 cloud_y_positions[index] = random.randrange(0, HEIGHT)
                 cloud_x_positions[index] = random.randrange(WIDTH, WIDTH*2)
+
 
 def on_draw():
     arcade.start_render()
@@ -178,15 +181,15 @@ def draw_instructions():
 
 def draw_play():
     arcade.set_background_color(arcade.color.LIGHT_BLUE)
-    global player_x_position, player_y_position, white_cloud, black_cloud, player, rainbow
+    global player_x_position, player_y_position, white_cloud, black_clouds, player, rainbow
     for x, y in zip(cloud_x_positions, cloud_y_positions):
-        white_cloud = arcade.draw_circle_filled(x, y, 15, arcade.color.WHITE)
+        arcade.draw_circle_filled(x, y, 15, arcade.color.WHITE)
     for x, y in zip(black_cloud_x_position, black_cloud_y_position):
-        black_cloud = arcade.draw_circle_filled(x, y, 15, arcade.color.BLACK)
+       arcade.draw_circle_filled(x, y, 15, arcade.color.BLACK)
     for x, y in zip(rainbow_x_position, rainbow_y_position):
-        rainbow = arcade.draw_circle_filled(x, y, 15, arcade.color.ORANGE_RED)
+        arcade.draw_circle_filled(x, y, 15, arcade.color.ORANGE_RED)
 
-    player = arcade.draw_circle_filled(player_x_position, player_y_position, 15, arcade.color.CORAL_PINK)
+    arcade.draw_circle_filled(player_x_position, player_y_position, 15, arcade.color.CORAL_PINK)
 
     arcade.draw_text(f"{updated_points}", 10, 440, arcade.color.COOL_BLACK, font_size= 20)
 
