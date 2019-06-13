@@ -34,6 +34,7 @@ for black_cloud in range(10):
     y = random.randrange(0, HEIGHT)
     black_cloud_x_position.append(x)
     black_cloud_y_position.append(y)
+    black_cloud = (black_cloud_x_position, black_cloud_y_position, 15)
 
 for rainbow in range(1):
     x = random.randrange(0, WIDTH)
@@ -43,7 +44,7 @@ for rainbow in range(1):
 
 def update(delta_time):
     if current_screen == "play":
-        global up_pressed, down_pressed, player_y_position, point, updated_points, speed, updated_speed
+        global up_pressed, down_pressed, player_y_position, point, updated_points, speed, updated_speed, black_cloud, player
         for index in range(len(cloud_x_positions)):
             cloud_x_positions[index] -= speed
             if cloud_x_positions[index] < 0:
@@ -80,6 +81,17 @@ def update(delta_time):
             updated_points = point
             speed += 0.05
             updated_speed = speed
+
+        player = (player_x_position, player_y_position, 15)
+        a = player[0] - black_cloud[0]
+        b = player[1] - black_cloud[1]
+        dist = math.sqrt(a**2 + b**2)
+
+        if dist < player[2] + black_cloud [2]:
+            current_screen ==  "game_over"
+            draw_gameover()
+
+
 
     elif current_screen == "menu":
         for index in range(len(cloud_x_positions)):
@@ -181,11 +193,10 @@ def draw_instructions():
 
 def draw_play():
     arcade.set_background_color(arcade.color.LIGHT_BLUE)
-    global player_x_position, player_y_position, white_cloud, black_clouds, player, rainbow
     for x, y in zip(cloud_x_positions, cloud_y_positions):
         arcade.draw_circle_filled(x, y, 15, arcade.color.WHITE)
     for x, y in zip(black_cloud_x_position, black_cloud_y_position):
-       arcade.draw_circle_filled(x, y, 15, arcade.color.BLACK)
+        arcade.draw_circle_filled(x, y, 15, arcade.color.BLACK)
     for x, y in zip(rainbow_x_position, rainbow_y_position):
         arcade.draw_circle_filled(x, y, 15, arcade.color.ORANGE_RED)
 
