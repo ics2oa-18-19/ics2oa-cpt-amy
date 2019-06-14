@@ -4,6 +4,9 @@ import math
 
 WIDTH = 640
 HEIGHT = 480
+PLAYER_RADIUS = 15
+BLACK_CLOUD_RADIUS = 15
+RAINBOW_RADIUS = 15
 
 current_screen = "menu"
 
@@ -14,8 +17,9 @@ black_cloud_y_position = []
 rainbow_x_position = []
 rainbow_y_position = []
 player_y_position = HEIGHT/2
-player_x_position = 20
+player_x_position = 30
 point = 0
+rainbow_point = 100
 updated_points = ""
 speed = 5
 updated_speed = ""
@@ -34,7 +38,6 @@ for black_cloud in range(10):
     y = random.randrange(0, HEIGHT)
     black_cloud_x_position.append(x)
     black_cloud_y_position.append(y)
-    black_cloud = (black_cloud_x_position, black_cloud_y_position, 15)
 
 for rainbow in range(1):
     x = random.randrange(0, WIDTH)
@@ -43,8 +46,11 @@ for rainbow in range(1):
     rainbow_y_position.append(y)
 
 def update(delta_time):
+    global up_pressed, down_pressed, player_y_position, point, current_screen
+    global updated_points, speed, updated_speed, black_cloud
+
     if current_screen == "play":
-        global up_pressed, down_pressed, player_y_position, point, updated_points, speed, updated_speed, black_cloud, player
+
         for index in range(len(cloud_x_positions)):
             cloud_x_positions[index] -= speed
             if cloud_x_positions[index] < 0:
@@ -72,27 +78,47 @@ def update(delta_time):
             player_y_position += 17
             point += 1
             updated_points = point
-            speed += 0.05
+            speed += 0.1
             updated_speed = speed
 
         if down_pressed == True:
             player_y_position -= 17
             point += 1
             updated_points = point
-            speed += 0.05
+            speed += 0.1
             updated_speed = speed
 
-        player = (player_x_position, player_y_position, 15)
-        a = player[0] - black_cloud[0]
-        b = player[1] - black_cloud[1]
-        dist = math.sqrt(a**2 + b**2)
+        # loop through blackcloud list using zip()
+        for x, y in zip(black_cloud_x_position, black_cloud_y_position):
+            a = player_x_position - x
+            b = player_y_position - y
+            dist = math.sqrt(a**2 + b**2)
+            if dist < PLAYER_RADIUS + BLACK_CLOUD_RADIUS:
+                current_screen = "game_over"
+        
+        for x, y in zip (rainbow_x_position, rainbow_y_position):
+            c = player_x_position - x
+            d = player_y_position - y
+            rainbow_distance = math.sqrt(c**2 + d**2)
+            if rainbow_distance < PLAYER_RADIUS + RAINBOW_RADIUS:
+                point += rainbow_point
+    elif current_screen == "game_over":
+        global up_pressed, down_pressed, player_y_position, point, current_screen
+        global updated_points, speed, updated_speed, black_cloud, cloud_x_positions, cloud_y_positions, black_cloud_x_position, black_cloud_y_position, rainbow_x_position, rainbow_y_position
 
-        if dist < player[2] + black_cloud [2]:
-            current_screen ==  "game_over"
-            draw_gameover()
-
-
-
+        cloud_x_positions = []
+        cloud_y_positions = []
+        black_cloud_x_position = []
+        black_cloud_y_position = []
+        rainbow_x_position = []
+        rainbow_y_position = []
+        player_y_position = HEIGHT / 2
+        player_x_position = 30
+        point = 0
+        rainbow_point = 100
+        updated_points = ""
+        speed = 5
+        updated_speed = ""
     elif current_screen == "menu":
         for index in range(len(cloud_x_positions)):
             cloud_x_positions[index] -= 10
@@ -115,7 +141,8 @@ def on_draw():
         draw_instructions()
     elif current_screen == "play":
         draw_play()
-
+    elif current_screen == "game_over":
+        draw_gameover()
 
 def on_key_press(key, modifiers):
     global current_screen
@@ -134,6 +161,9 @@ def on_key_press(key, modifiers):
         if key == arcade.key.S:
             down_pressed = True
         elif key == arcade.key.ESCAPE:
+            current_screen = "menu"
+    elif current_screen == "game_over":
+        if key == arcade.key.ESCAPE:
             current_screen = "menu"
 
 def on_key_release(key, modifiers):
@@ -167,6 +197,7 @@ def draw_menu():
                      arcade.color.COOL_BLACK, font_size=20)
     arcade.draw_text("Press P to Play", WIDTH/2, HEIGHT/2-90,
                      arcade.color.COOL_BLACK, font_size=20)
+    arcade.set_background_color(arcade.color.LIGHT_BLUE)
 
     for x, y in zip(cloud_x_positions, cloud_y_positions):
         arcade.draw_circle_filled(x, y, 5, arcade.color.WHITE)
@@ -181,7 +212,7 @@ def draw_instructions():
            unicorn up and down.
            2. Press W to go up, S to go down
            3. For every movement the unicorn makes, 1 point is given. 
-           4. A rainbow item is worth 10000 points. 
+           4. Eat the green clouds for a ramdom amount of bonus points!
            5. The clouds will move faster as the time goes by """, 0, HEIGHT / 2, arcade.color.BLACK, font_size=15)
     arcade.draw_text("ESC to go back", 20, 20,
                      arcade.color.BLACK, font_size=20)
@@ -193,21 +224,25 @@ def draw_instructions():
 
 def draw_play():
     arcade.set_background_color(arcade.color.LIGHT_BLUE)
+    global black_cloud
     for x, y in zip(cloud_x_positions, cloud_y_positions):
         arcade.draw_circle_filled(x, y, 15, arcade.color.WHITE)
     for x, y in zip(black_cloud_x_position, black_cloud_y_position):
-        arcade.draw_circle_filled(x, y, 15, arcade.color.BLACK)
+        black_cloud = arcade.draw_circle_filled(x, y, BLACK_CLOUD_RADIUS, arcade.color.BLACK)
     for x, y in zip(rainbow_x_position, rainbow_y_position):
-        arcade.draw_circle_filled(x, y, 15, arcade.color.ORANGE_RED)
+        arcade.draw_circle_filled(x, y, 15, arcade.color.SPRING_GREEN)
 
-    arcade.draw_circle_filled(player_x_position, player_y_position, 15, arcade.color.CORAL_PINK)
+    arcade.draw_circle_filled(player_x_position, player_y_position, PLAYER_RADIUS, arcade.color.CORAL_PINK)
 
     arcade.draw_text(f"{updated_points}", 10, 440, arcade.color.COOL_BLACK, font_size= 20)
 
 def draw_gameover():
     arcade.set_background_color(arcade.color.BLACK)
     arcade. draw_text("""GAME 
-                         OVER""", WIDTH/2, HEIGHT/2, arcade.color.RED, font_size= 30)
+                         OVER""", 20, HEIGHT/2, arcade.color.WHITE, font_size= 30)
+    arcade.draw_text("ESC to go back", 20, 20,
+                     arcade.color.WHITE, font_size=20)
+
 
 if __name__ == '__main__':
     setup()
